@@ -1,23 +1,27 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { createStackNavigator, NavigationActions } from 'react-navigation';
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-      </View>
-    );
-  }
-}
+import Dashboard from './components/Dashboard';
+import Login from './components/Login';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+const App = createStackNavigator({
+    Dashboard: { screen: Dashboard },
+    Login: {screen: Login }
+},
+{
+    initialRouteName: 'Dashboard',
+    headerMode: 'none'
 });
+
+const navigateOnce = (getStateForAction) => (action, state) => {
+  const {type, routeName} = action;
+  return (
+    state &&
+    type === NavigationActions.NAVIGATE &&
+    routeName === state.routes[state.routes.length - 1].routeName
+  ) ? null : getStateForAction(action, state);
+};
+
+App.router.getStateForAction = navigateOnce(App.router.getStateForAction);
+
+export default App;
