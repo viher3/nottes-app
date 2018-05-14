@@ -1,13 +1,25 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Container, Header, Left, Body, Right, Button, Icon, Title } from 'native-base';
 
 export default class Login extends React.Component 
 {
+	checkLogin()
+  	{
+  		alert("TODO");
+  	}
+
 	render() {
 	    return (
-	      <View>
-	        <Text>Login Component</Text>
-	      </View>
+
+	      	<Container>
+	        	<Header>
+	        	  	<Body>
+            			<Title>Header</Title>
+        	  		</Body>
+    	      	</Header>
+          	</Container>
+
 	    );
 	  }
+
 }

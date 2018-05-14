@@ -1,27 +1,65 @@
 import React from 'react';
-import { createStackNavigator, NavigationActions } from 'react-navigation';
+import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
+import { Container, Button, text, ListItem, Text } from "native-base";
+import Expo from "expo";
 
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 
-const App = createStackNavigator({
-    Dashboard: { screen: Dashboard },
-    Login: {screen: Login }
-},
+const AppStack = createStackNavigator({ Dashboard: Dashboard });
+const AuthStack = createStackNavigator({ Login: {screen: Login } });
+
+export default class App extends React.Component 
 {
-    initialRouteName: 'Dashboard',
-    headerMode: 'none'
-});
+  constructor(props) {
+    super(props);
+    this.state = { loading: true };
+    this._bootstrapAsync();
+  }
 
-const navigateOnce = (getStateForAction) => (action, state) => {
-  const {type, routeName} = action;
-  return (
-    state &&
-    type === NavigationActions.NAVIGATE &&
-    routeName === state.routes[state.routes.length - 1].routeName
-  ) ? null : getStateForAction(action, state);
-};
+  _bootstrapAsync = async () => 
+  {
+  	// https://facebook.github.io/react-native/docs/asyncstorage.html
+  	try 
+  	{
+    	const userToken = await AsyncStorage.getItem('userToken');
+    	console.log(userToken);
+	}
+	catch(error)
+	{
+		console.log(error);
+	}
 
-App.router.getStateForAction = navigateOnce(App.router.getStateForAction);
+    // This will switch to the App screen or Auth screen and this loading
+    // screen will be unmounted and thrown away.
+    this.props.navigation.navigate(userToken ? 'App' : 'Auth');
+  };
 
-export default App;
+  async componentWillMount() 
+  {
+    await Expo.Font.loadAsync({
+      Roboto: require("native-base/Fonts/Roboto.ttf"),
+      Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+      Ionicons: require("@expo/vector-icons/fonts/Ionicons.ttf"),
+    });
+    this.setState({ loading: false });
+  }
+
+  render() {
+    if (this.state.loading) 
+    {
+      return <Expo.AppLoading />;
+    }
+    return (
+      <Container>
+
+        <Button>
+          <Text>Button</Text>
+        </Button>
+
+        <ListItem />
+      </Container>
+    );
+
+  }
+}
