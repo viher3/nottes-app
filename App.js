@@ -1,6 +1,7 @@
 import React from 'react';
 import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import { Container, Button, text, ListItem, Text } from "native-base";
+import { AsyncStorage } from "react-native";
 import Expo from "expo";
 
 import Dashboard from './components/Dashboard';
@@ -13,26 +14,18 @@ export default class App extends React.Component
 {
   constructor(props) {
     super(props);
-    this.state = { loading: true };
-    this._bootstrapAsync();
+    this.state = { 
+    	loading: true,
+    	userIsLogged: false
+    };
   }
 
   _bootstrapAsync = async () => 
   {
-  	// https://facebook.github.io/react-native/docs/asyncstorage.html
-  	try 
-  	{
-    	const userToken = await AsyncStorage.getItem('userToken');
-    	console.log(userToken);
-	}
-	catch(error)
-	{
-		console.log(error);
-	}
+    const userToken = await AsyncStorage.getItem('userToken');
+    this.state.userIsLogged = (userToken) ? true : false;
 
-    // This will switch to the App screen or Auth screen and this loading
-    // screen will be unmounted and thrown away.
-    this.props.navigation.navigate(userToken ? 'App' : 'Auth');
+    this.setState({ loading: false });
   };
 
   async componentWillMount() 
@@ -42,24 +35,24 @@ export default class App extends React.Component
       Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
       Ionicons: require("@expo/vector-icons/fonts/Ionicons.ttf"),
     });
-    this.setState({ loading: false });
+
+   	this._bootstrapAsync();
   }
 
-  render() {
+  render() 
+  {
     if (this.state.loading) 
     {
       return <Expo.AppLoading />;
     }
-    return (
-      <Container>
 
-        <Button>
-          <Text>Button</Text>
-        </Button>
-
-        <ListItem />
-      </Container>
-    );
-
+    if( ! this.state.userIsLogged )
+    {
+    	return ( <Login></Login> );
+    }
+    else
+    {
+    	return ( <Dashboard></Dashboard> );
+    }
   }
 }

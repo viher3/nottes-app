@@ -14,7 +14,7 @@ export default class Login extends React.Component
 	      	<Container>
 	        	<Header>
 	        	  	<Body>
-            			<Title>Header</Title>
+            			<Title>LOGIN</Title>
         	  		</Body>
     	      	</Header>
           	</Container>
