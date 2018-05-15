@@ -1,32 +1,45 @@
 import React from 'react';
 import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import { Container, Button, text, ListItem, Text } from "native-base";
-import { AsyncStorage } from "react-native";
 import Expo from "expo";
 
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 
-const AppStack = createStackNavigator({ Dashboard: Dashboard });
-const AuthStack = createStackNavigator({ Login: {screen: Login } });
+const AuthNavigator = createStackNavigator(
+{
+  	Login: { screen: Login }
+});
+
+class AuthenticationScreen extends React.Component 
+{
+  static router = AuthNavigator.router;
+  static navigationOptions = { header: null };
+
+  render()
+  {
+    return (
+      <AuthNavigator navigation={this.props.navigation} />
+    );
+  }
+}
+
+const AppNavigator = createStackNavigator(
+{ 
+	Auth: AuthenticationScreen,
+	Dashboard: { screen: Dashboard }
+});
 
 export default class App extends React.Component 
 {
-  constructor(props) {
+  constructor(props) 
+  {
     super(props);
+
     this.state = { 
-    	loading: true,
-    	userIsLogged: false
+    	loading: true
     };
   }
-
-  _bootstrapAsync = async () => 
-  {
-    const userToken = await AsyncStorage.getItem('userToken');
-    this.state.userIsLogged = (userToken) ? true : false;
-
-    this.setState({ loading: false });
-  };
 
   async componentWillMount() 
   {
@@ -36,7 +49,7 @@ export default class App extends React.Component
       Ionicons: require("@expo/vector-icons/fonts/Ionicons.ttf"),
     });
 
-   	this._bootstrapAsync();
+    this.setState({ loading: false });
   }
 
   render() 
@@ -46,13 +59,6 @@ export default class App extends React.Component
       return <Expo.AppLoading />;
     }
 
-    if( ! this.state.userIsLogged )
-    {
-    	return ( <Login></Login> );
-    }
-    else
-    {
-    	return ( <Dashboard></Dashboard> );
-    }
+    return ( <AppNavigator></AppNavigator> );
   }
 }
