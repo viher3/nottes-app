@@ -2,12 +2,10 @@ import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 import { Container, Content, Header, Left, Body, Right, Button, Icon, Title, Text } from 'native-base';
 import { AsyncStorage } from "react-native";
-import Expo from "expo";
+import Loading from './Loading';
 
 export default class Login extends React.Component 
 {
-	static navigationOptions = { header: null };
-
 	constructor(props)
 	{
 		super(props);
@@ -17,15 +15,16 @@ export default class Login extends React.Component
 	    	userIsLogged: false
 	    };
 
-	    this.checkLogin();
+	    this._checkLogin();
 	}
 
-	checkLogin = async () => 
+	_checkLogin = async () => 
   	{
   		const userToken = await AsyncStorage.getItem('userToken');
 	    this.state.userIsLogged = (userToken) ? true : false;
 
 	    // TODO: check JWT expiration ...
+	    this.state.userIsLogged = true;
 
 	    if( this.state.userIsLogged )
 	    {
@@ -35,11 +34,16 @@ export default class Login extends React.Component
   		this.setState({ loading: false });
   	}
 
+  	checkLoginAction()
+  	{
+  		this.props.navigation.navigate('Dashboard');
+  	}
+
 	render() 
 	{
 		if (this.state.loading) 
 	    {
-	      return <Expo.AppLoading />;
+	      return <Loading/>;
 	    }
 
 	    return (
@@ -50,7 +54,7 @@ export default class Login extends React.Component
         	  		</Body>
     	      	</Header>
     	      	<Content>
-    	      		<Button onPress={() => this.checkLogin()}>
+    	      		<Button onPress={() => this.checkLoginAction()}>
             			<Text>Login</Text>
           			</Button>
     	      	</Content>

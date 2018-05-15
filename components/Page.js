@@ -1,10 +1,11 @@
 import React from 'react';
 import { Container, Content, Header, Left, Body, Right, Button, Icon, Title, Text } from 'native-base';
 
-export default class Dashboard extends React.Component 
+export default class Page extends React.Component 
 {
-	render() 
-	{
+	static navigationOptions = { header: null };
+
+	render() {
 	    return (
 	     	
 	     	<Container>
@@ -15,9 +16,8 @@ export default class Dashboard extends React.Component
 			            </Button>
 	        		</Left>
 	        	  	<Body>
-            			<Title>DASHBOARD</Title>
+            			<Title>PAGE TEST</Title>
         	  		</Body>
-        	  		<Right />
     	      	</Header>
           	</Container>
           	

@@ -1,14 +1,18 @@
 import React from 'react';
-import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
-import { Container, Button, text, ListItem, Text } from "native-base";
+import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
 import Expo from "expo";
 
+import Loading from './components/Loading';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
+import Page from './components/Page';
 
 const AuthNavigator = createStackNavigator(
 {
   	Login: { screen: Login }
+},
+{
+  headerMode: 'none'
 });
 
 class AuthenticationScreen extends React.Component 
@@ -24,10 +28,14 @@ class AuthenticationScreen extends React.Component
   }
 }
 
-const AppNavigator = createStackNavigator(
+const AppNavigator = createDrawerNavigator(
 { 
-	Auth: AuthenticationScreen,
-	Dashboard: { screen: Dashboard }
+	Auth: { screen: AuthenticationScreen, navigationOptions: { drawerLabel: () => null } },
+	Dashboard: { screen: Dashboard },
+	Page: { screen: Page }
+},
+{
+  headerMode: 'none'
 });
 
 export default class App extends React.Component 
@@ -56,7 +64,7 @@ export default class App extends React.Component
   {
     if (this.state.loading) 
     {
-      return <Expo.AppLoading />;
+      return <Loading/>;
     }
 
     return ( <AppNavigator></AppNavigator> );
