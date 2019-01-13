@@ -6,6 +6,7 @@ import Loading from './components/Loading';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import Page from './components/Page';
+import Logout from './components/Logout';
 
 const AuthNavigator = createStackNavigator(
 {
@@ -32,7 +33,8 @@ const AppNavigator = createDrawerNavigator(
 { 
 	Auth: { screen: AuthenticationScreen, navigationOptions: { drawerLabel: () => null } },
 	Dashboard: { screen: Dashboard },
-	Page: { screen: Page }
+  Page: { screen: Page },
+	Logout: { screen: Logout }
 },
 {
   headerMode: 'none'
