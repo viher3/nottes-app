@@ -1,4 +1,4 @@
 export default 
 {
-	"api_endpoint" : "https://notes-api.albertolabs.com/api"
+	"api_endpoint" : "http://192.168.1.10:8000/api"
 }
