@@ -9,23 +9,6 @@ export default class Dashboard extends React.Component
 		super(props);
 	}
 
-	logout = async () => 
-	{
-		try 
-		{
-			await AsyncStorage.removeItem('userToken');
-
-			this.props.navigation.navigate('Login');
-
-			console.log("logout click");
-		}
-		catch (error) 
-		{
-			// Error saving data
-		    console.log(error);
-		}
-	}
-
 	render() 
 	{
 	    return (
@@ -38,14 +21,10 @@ export default class Dashboard extends React.Component
 			            </Button>
 	        		</Left>
 	        	  	<Body>
-            			<Title>DASHBOARD</Title>
+            			<Title>Dashboard</Title>
         	  		</Body>
         	  		<Right />
     	      	</Header>
-
-    			<Button full onPress={() => this.logout()} style={{ marginTop: 50 }}>
-        			<Text>Logout</Text>
-      			</Button>
 
           	</Container>
           	
